@@ -16,7 +16,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [
     <UHeader :title="appConfig.name">
       <template #title>
         <NuxtLink to="/" class="flex items-center gap-2">
-          <img src="/logo.png" :alt="appConfig.name" class="h-6" />
+          <img src="/logo.avif" :alt="appConfig.name" class="h-6" width="30" height="24" />
           <span class="font-bold">{{ appConfig.name }}</span>
         </NuxtLink>
       </template>
