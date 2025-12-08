@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mohamedfadl/color-shift"
+    "url": "https://github.com/fadl285/color-shift"
   },
   "scripts": {
     "build": "nuxt build",
@@ -35,17 +35,22 @@
     "@nuxt/hints": "^1.0.0-alpha.3",
     "@nuxt/test-utils": "^3.21.0",
     "@nuxt/ui": "^4.2.1",
+    "culori": "^4.0.2",
     "eslint": "^9.39.1",
     "nuxt": "^4.2.1",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.79",
+    "@types/culori": "^4.0.1",
+    "@vueuse/nuxt": "^14.1.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }
