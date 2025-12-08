@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { ColorFormat } from '~/composables/useColorFormats'
 
+const appConfig = useAppConfig()
+
 useSeoMeta({
-  title: 'ColorShift - Convert Colors Between CSS Formats',
-  description:
-    'ColorShift: Convert colors between CSS formats instantly. Supports HEX, RGB, HSL, HWB, LAB, LCH, OKLAB, OKLCH and more.'
+  title: `${appConfig.name} - Convert Colors Between CSS Formats`,
+  description: `${appConfig.name}: ${appConfig.description}. Supports HEX, RGB, HSL, HWB, LAB, LCH, OKLAB, OKLCH and more.`
 })
 
 const { parseColor, getAllFormats } = useColorConverter()
@@ -64,7 +65,7 @@ const heroLinks = [
   {
     label: 'View on GitHub',
     icon: 'i-lucide-github',
-    to: 'https://github.com/fadl285/color-shift',
+    to: appConfig.repository,
     target: '_blank',
     variant: 'outline' as const,
     size: 'xl' as const

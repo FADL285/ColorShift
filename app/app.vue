@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const appConfig = useAppConfig()
 const colorMode = useColorMode()
 const color = computed(() => (colorMode.value === 'dark' ? '#020618' : 'white'))
 
@@ -17,16 +18,17 @@ useHead({
   htmlAttrs: { lang: 'en' }
 })
 
+const ogTitle = `${appConfig.name} - Convert Colors Between CSS Formats`
+const ogDescription = `${appConfig.description}. Batch process CSS/SASS/PostCSS files client-side.`
+
 useSeoMeta({
-  titleTemplate: '%s - ColorShift',
-  ogTitle: 'ColorShift - Convert Colors Between CSS Formats',
-  ogDescription:
-    'Convert colors between CSS formats instantly. Batch process CSS/SASS/PostCSS files client-side.',
+  titleTemplate: `%s - ${appConfig.name}`,
+  ogTitle,
+  ogDescription,
   ogImage: '/og.png',
-  ogUrl: 'https://colorshift.dev',
-  twitterTitle: 'ColorShift - Convert Colors Between CSS Formats',
-  twitterDescription:
-    'Convert colors between CSS formats instantly. Batch process CSS/SASS/PostCSS files client-side.',
+  ogUrl: appConfig.url,
+  twitterTitle: ogTitle,
+  twitterDescription: ogDescription,
   twitterImage: '/og.png',
   twitterCard: 'summary_large_image'
 })

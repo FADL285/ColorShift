@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 
+const appConfig = useAppConfig()
 const route = useRoute()
 
 const navItems = computed<NavigationMenuItem[]>(() => [
@@ -12,11 +13,11 @@ const navItems = computed<NavigationMenuItem[]>(() => [
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <UHeader title="ColorShift">
+    <UHeader :title="appConfig.name">
       <template #title>
         <NuxtLink to="/" class="flex items-center gap-2">
-          <img src="/logo.png" alt="ColorShift" class="h-6" />
-          <span class="font-bold">ColorShift</span>
+          <img src="/logo.png" :alt="appConfig.name" class="h-6" />
+          <span class="font-bold">{{ appConfig.name }}</span>
         </NuxtLink>
       </template>
 
@@ -38,7 +39,8 @@ const navItems = computed<NavigationMenuItem[]>(() => [
     <UFooter>
       <template #left>
         <p class="text-muted text-sm">
-          &copy; <NuxtTime :datetime="new Date().getFullYear()" /> ColorShift. 100% client-side.
+          &copy; <NuxtTime :datetime="new Date().getFullYear()" /> {{ appConfig.name }}. 100%
+          client-side.
         </p>
       </template>
 
@@ -47,7 +49,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [
           icon="i-lucide-github"
           color="neutral"
           variant="ghost"
-          to="https://github.com/fadl285/color-shift"
+          :to="appConfig.repository"
           target="_blank"
           aria-label="GitHub"
         />

@@ -2,8 +2,9 @@ export default defineAppConfig({
   // App metadata
   name: 'ColorShift',
   description: 'Convert colors between CSS formats instantly',
+  url: 'https://colorshift.dev',
   author: 'Mohamed Fadl',
-  repository: 'https://github.com/fadl285/color-shift',
+  repository: 'https://github.com/FADL285/ColorShift',
 
   // Nuxt UI customizations
   ui: {

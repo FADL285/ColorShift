@@ -1,8 +1,9 @@
 <script setup lang="ts">
+const appConfig = useAppConfig()
+
 useSeoMeta({
-  title: 'ColorShift - About',
-  description:
-    'Learn about ColorShift, the privacy-focused color conversion tool. 100% client-side processing for CSS color format conversion.'
+  title: `${appConfig.name} - About`,
+  description: `Learn about ${appConfig.name}, the privacy-focused color conversion tool. 100% client-side processing for CSS color format conversion.`
 })
 
 const { formats } = useColorFormats()
@@ -185,7 +186,7 @@ const privacyPoints = [
               memory.
             </p>
             <UButton
-              to="https://github.com/fadl285/color-shift"
+              :to="appConfig.repository"
               target="_blank"
               variant="outline"
               icon="i-lucide-github"

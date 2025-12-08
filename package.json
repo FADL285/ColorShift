@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fadl285/color-shift"
+    "url": "https://github.com/FADL285/ColorShift"
   },
   "scripts": {
     "build": "nuxt build",
