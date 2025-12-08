@@ -6,21 +6,21 @@ const color = computed(() => (colorMode.value === 'dark' ? '#020618' : 'white'))
 const route = useRoute()
 const canonicalUrl = computed(() => `${appConfig.url}${route.path}`)
 
-useHead({
+useHead(() => ({
   meta: [
     { charset: 'utf-8' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { key: 'theme-color', name: 'theme-color', content: color }
+    { key: 'theme-color', name: 'theme-color', content: color.value }
   ],
   link: [
     { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
     { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
     { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
     { rel: 'manifest', href: '/site.webmanifest' },
-    { rel: 'canonical', href: canonicalUrl }
+    { rel: 'canonical', href: canonicalUrl.value }
   ],
   htmlAttrs: { lang: 'en' }
-})
+}))
 
 const ogTitle = `${appConfig.name} - Convert Colors Between CSS Formats`
 const ogDescription = `${appConfig.description}. Batch process CSS/SASS/PostCSS files client-side.`
