@@ -1,0 +1,31 @@
+{
+  "name": "color-shift",
+  "type": "module",
+  "private": true,
+  "version": "0.0.1",
+  "description": "A client-side web application for designers and developers to convert colors between different CSS color formats and batch-process CSS/SASS/PostCSS files.",
+  "author": "Mohamed Fadl",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohamedfadl/color-shift"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "^1.11.0",
+    "@nuxt/hints": "^1.0.0-alpha.3",
+    "@nuxt/test-utils": "^3.21.0",
+    "@nuxt/ui": "^4.2.1",
+    "eslint": "^9.39.1",
+    "nuxt": "^4.2.1",
+    "typescript": "^5.9.3",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
+  }
+}
