@@ -39,8 +39,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [
     <UFooter>
       <template #left>
         <p class="text-muted text-sm">
-          &copy; <NuxtTime :datetime="new Date().getFullYear()" /> {{ appConfig.name }}. 100%
-          client-side.
+          &copy; {{ new Date().getFullYear() }} {{ appConfig.name }}. 100% client-side.
         </p>
       </template>
 
