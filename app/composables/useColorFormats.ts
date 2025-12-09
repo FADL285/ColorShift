@@ -1,4 +1,5 @@
-// Import and re-export patterns from centralized utility file
+// Import patterns from centralized utility file for internal use
+// Note: COLOR_REGEX_PATTERNS is auto-imported from ~/utils/colorPatterns
 import { COLOR_REGEX_PATTERNS } from '~/utils/colorPatterns'
 
 export type ColorFormat =
@@ -39,7 +40,6 @@ export const COLOR_FORMATS: ColorFormatDefinition[] = [
   },
   { id: 'oklch', label: 'OKLCH', example: 'oklch(0.68 0.17 40)', description: 'OK perceptual LCH' }
 ]
-export { COLOR_REGEX_PATTERNS }
 
 export function useColorFormats() {
   const formats = COLOR_FORMATS

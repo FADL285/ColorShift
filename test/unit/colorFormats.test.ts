@@ -1,9 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import {
-  useColorFormats,
-  COLOR_FORMATS,
-  COLOR_REGEX_PATTERNS
-} from '../../app/composables/useColorFormats'
+import { useColorFormats, COLOR_FORMATS } from '../../app/composables/useColorFormats'
+import { COLOR_REGEX_PATTERNS } from '../../app/utils/colorPatterns'
 
 describe('useColorFormats', () => {
   const { formats, patterns, detectFormat, getFormatLabel, getFormatExample } = useColorFormats()
