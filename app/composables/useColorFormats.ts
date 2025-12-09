@@ -1,3 +1,6 @@
+// Import and re-export patterns from centralized utility file
+import { COLOR_REGEX_PATTERNS } from '~/utils/colorPatterns'
+
 export type ColorFormat =
   | 'hex'
   | 'rgb'
@@ -36,17 +39,7 @@ export const COLOR_FORMATS: ColorFormatDefinition[] = [
   },
   { id: 'oklch', label: 'OKLCH', example: 'oklch(0.68 0.17 40)', description: 'OK perceptual LCH' }
 ]
-
-export const COLOR_REGEX_PATTERNS: Record<string, RegExp> = {
-  hex: /#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})\b/g,
-  rgb: /rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*(?:[,/]\s*[\d.]+%?)?\s*\)/gi,
-  hsl: /hsla?\(\s*[\d.]+(?:deg|rad|grad|turn)?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*(?:[,/]\s*[\d.]+%?)?\s*\)/gi,
-  hwb: /hwb\(\s*[\d.]+(?:deg|rad|grad|turn)?\s+[\d.]+%\s+[\d.]+%\s*(?:\/\s*[\d.]+%?)?\s*\)/gi,
-  lab: /lab\(\s*[\d.]+%?\s+[\d.-]+\s+[\d.-]+\s*(?:\/\s*[\d.]+%?)?\s*\)/gi,
-  lch: /lch\(\s*[\d.]+%?\s+[\d.]+\s+[\d.]+(?:deg|rad|grad|turn)?\s*(?:\/\s*[\d.]+%?)?\s*\)/gi,
-  oklab: /oklab\(\s*[\d.]+%?\s+[\d.-]+\s+[\d.-]+\s*(?:\/\s*[\d.]+%?)?\s*\)/gi,
-  oklch: /oklch\(\s*[\d.]+%?\s+[\d.]+\s+[\d.]+(?:deg|rad|grad|turn)?\s*(?:\/\s*[\d.]+%?)?\s*\)/gi
-}
+export { COLOR_REGEX_PATTERNS }
 
 export function useColorFormats() {
   const formats = COLOR_FORMATS

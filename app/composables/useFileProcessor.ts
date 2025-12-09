@@ -1,6 +1,7 @@
 import { parse } from 'culori'
 import type { ColorFormat } from './useColorFormats'
 import type { ConversionOptions } from './useColorConverter'
+import { COMBINED_COLOR_REGEX } from '~/utils/colorPatterns'
 
 export interface ColorMatch {
   original: string
@@ -25,10 +26,6 @@ export interface ProcessingResult {
 export interface ProcessingOptions extends ConversionOptions {
   targetFormat: ColorFormat
 }
-
-// Combined regex to match all CSS color formats
-const COMBINED_COLOR_REGEX =
-  /#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})\b|rgba?\(\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*(?:[,/]\s*[\d.]+%?)?\s*\)|hsla?\(\s*[\d.]+(?:deg|rad|grad|turn)?\s*[,\s]\s*[\d.]+%?\s*[,\s]\s*[\d.]+%?\s*(?:[,/]\s*[\d.]+%?)?\s*\)|hwb\(\s*[\d.]+(?:deg|rad|grad|turn)?\s+[\d.]+%\s+[\d.]+%\s*(?:\/\s*[\d.]+%?)?\s*\)|lab\(\s*[\d.]+%?\s+[\d.-]+\s+[\d.-]+\s*(?:\/\s*[\d.]+%?)?\s*\)|lch\(\s*[\d.]+%?\s+[\d.]+\s+[\d.]+(?:deg|rad|grad|turn)?\s*(?:\/\s*[\d.]+%?)?\s*\)|oklab\(\s*[\d.]+%?\s+[\d.-]+\s+[\d.-]+\s*(?:\/\s*[\d.]+%?)?\s*\)|oklch\(\s*[\d.]+%?\s+[\d.]+\s+[\d.]+(?:deg|rad|grad|turn)?\s*(?:\/\s*[\d.]+%?)?\s*\)/gi
 
 export function useFileProcessor() {
   const { convertToFormat } = useColorConverter()
