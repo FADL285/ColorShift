@@ -1,10 +1,35 @@
 <script setup lang="ts">
 const appConfig = useAppConfig()
+const { faqItems } = useSeoSchemas()
 
+// SEO Meta Tags with keyword optimization
 useSeoMeta({
-  title: `${appConfig.name} - About`,
-  description: `Learn about ${appConfig.name}, the privacy-focused color conversion tool. 100% client-side processing for CSS color format conversion.`
+  title: 'About ColorShift - How It Works & Supported Color Formats',
+  description:
+    'Learn how ColorShift converts colors client-side with complete privacy. Supports HEX, RGB, HSL, OKLCH, LAB, LCH, HWB formats. Free and open source.',
+  keywords:
+    'colorshift about, color converter how it works, css color formats, oklch color format, color space conversion, client-side color converter, hex rgb hsl converter, color format guide',
+  ogTitle: 'About ColorShift - Privacy-Focused Color Conversion Tool',
+  ogDescription:
+    'Discover how ColorShift works. 100% browser-based color conversion, no server processing. Free and open source.'
 })
+
+// FAQPage Structured Data for rich results
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'FAQPage',
+    name: 'About ColorShift - FAQ',
+    description: 'Frequently asked questions about ColorShift color converter tool.'
+  }),
+  ...faqItems.map((item) => ({
+    '@type': 'Question' as const,
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer' as const,
+      text: item.answer
+    }
+  }))
+])
 
 const { formats } = useColorFormats()
 

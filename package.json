@@ -38,6 +38,7 @@
     "@nuxt/hints": "^1.0.0-alpha.3",
     "@nuxt/test-utils": "^3.21.0",
     "@nuxt/ui": "^4.2.1",
+    "@nuxtjs/seo": "^3.2.2",
     "culori": "^4.0.2",
     "eslint": "^9.39.1",
     "magic-regexp": "^0.10.0",

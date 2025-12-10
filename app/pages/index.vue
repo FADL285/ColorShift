@@ -2,11 +2,30 @@
 import type { ColorFormat } from '~/composables/useColorFormats'
 
 const appConfig = useAppConfig()
+const { webApplicationSchema } = useSeoSchemas()
 
+// SEO Meta Tags with keyword optimization
 useSeoMeta({
-  title: `${appConfig.name} - Convert Colors Between CSS Formats`,
-  description: `${appConfig.name}: ${appConfig.description}. Supports HEX, RGB, HSL, HWB, LAB, LCH, OKLAB, OKLCH and more.`
+  title: 'Free Online CSS Color Converter - HEX RGB HSL OKLCH',
+  description:
+    'Convert colors between HEX, RGB, HSL, OKLCH, LAB, LCH and more CSS formats instantly. Free batch CSS file converter. 100% client-side, privacy-focused.',
+  keywords:
+    'color converter, hex to rgb, rgb to hex, hex to hsl, hsl to hex, hex to oklch, oklch to hex, rgb to oklch, oklch to rgb, rgb to hsl, hsl to rgb, css color converter, oklch converter, lch converter, batch css converter, online color converter free',
+  ogTitle: `${appConfig.name} - Free CSS Color Converter | HEX RGB HSL OKLCH`,
+  ogDescription:
+    'Convert colors instantly between CSS formats. Support for HEX, RGB, HSL, OKLCH, LAB, LCH. Batch convert CSS files. Free and privacy-focused.'
 })
+
+// Structured Data (JSON-LD) for rich results
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: 'ColorShift - Free Online CSS Color Converter',
+    description:
+      'Convert colors between HEX, RGB, HSL, OKLCH and more CSS formats instantly. Free, privacy-focused, 100% client-side.'
+  }),
+  webApplicationSchema
+])
 
 const { parseColor, getAllFormats } = useColorConverter()
 
@@ -105,12 +124,13 @@ const features = [
   <div>
     <!-- Hero Section -->
     <UPageHero
-      title="Convert Colors Instantly"
-      description="Transform colors between HEX, RGB, HSL, OKLCH, and more CSS formats. 100% client-side, fast, and free."
+      title="Free CSS Color Converter"
+      description="Convert colors between HEX, RGB, HSL, OKLCH, LAB, and LCH formats instantly. Batch process CSS files. 100% client-side and free."
       :links="heroLinks"
-      headline="Free & Open Source"
+      headline="HEX • RGB • HSL • OKLCH • LAB • LCH"
       :ui="{
-        container: 'md:pt-18 lg:pt-20 md:pb-18 lg:pb-20'
+        container: 'md:pt-18 lg:pt-20 md:pb-18 lg:pb-20',
+        description: 'max-w-2xl text-pretty mx-auto'
       }"
     />
 

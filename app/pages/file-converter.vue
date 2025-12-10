@@ -2,11 +2,27 @@
 import type { ColorFormat } from '~/composables/useColorFormats'
 import type { ProcessingResult } from '~/composables/useFileProcessor'
 
+// SEO Meta Tags with keyword optimization
 useSeoMeta({
-  title: 'ColorShift - Batch Convert CSS Files',
+  title: 'Batch CSS Color Converter - Convert Entire Files to OKLCH',
   description:
-    'Batch convert colors in CSS, SASS, and PostCSS files. Transform HEX, RGB, HSL to OKLCH and more formats instantly.'
+    'Batch convert all colors in CSS, SASS, and PostCSS files. Transform HEX to OKLCH, RGB to HSL, and more. 100% client-side processing, your files stay private.',
+  keywords:
+    'batch color converter, css color converter, sass color converter, postcss color converter, bulk color conversion, hex to oklch converter, css file converter, convert css colors, batch hex to rgb, css color migration',
+  ogTitle: 'ColorShift File Converter - Batch CSS Color Conversion',
+  ogDescription:
+    'Upload CSS files and convert all colors at once. Perfect for migrating to modern OKLCH format. 100% private, client-side processing.'
 })
+
+// Structured Data for file converter page
+useSchemaOrg([
+  defineWebPage({
+    '@type': 'WebPage',
+    name: 'Batch CSS Color Converter - ColorShift',
+    description:
+      'Batch convert all colors in CSS, SASS, and PostCSS files to your preferred format.'
+  })
+])
 
 const { processFile } = useFileProcessor()
 
