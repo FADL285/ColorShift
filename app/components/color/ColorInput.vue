@@ -92,6 +92,7 @@ const inputColor = computed(() => {
         <input
           type="color"
           :value="pickerColor"
+          aria-label="Pick a color"
           class="absolute inset-0 opacity-0 z-10 cursor-pointer w-full h-full"
           @input="onColorPickerChange"
         />
