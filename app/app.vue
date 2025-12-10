@@ -10,7 +10,11 @@ useHead(() => ({
   meta: [
     { charset: 'utf-8' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { key: 'theme-color', name: 'theme-color', content: color.value }
+    { key: 'theme-color', name: 'theme-color', content: color.value },
+    {
+      name: 'google-site-verification',
+      content: 'rZxcyggOHyW5Z-EKpugLEbjuPwK9tOuBdgVwzKOitzQ'
+    }
   ],
   link: [
     { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
