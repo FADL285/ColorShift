@@ -47,7 +47,11 @@ const demoColors = [
   { color: '#2ecc71', name: 'Green' },
   { color: '#9b59b6', name: 'Purple' },
   { color: '#f39c12', name: 'Orange' },
-  { color: '#1abc9c', name: 'Teal' }
+  { color: '#75C9C8', name: 'Pearl Aqua' },
+  { color: '#80A1D4', name: 'Wisteria Blue' },
+  { color: '#C0B9DD', name: 'Periwinkle' },
+  { color: '#DED9E2', name: 'Lavander' },
+  { color: '#F7F4EA', name: 'Floral White' }
 ]
 
 function selectDemoColor(color: string) {
@@ -189,7 +193,9 @@ const features = [
         <template #footer>
           <p class="text-sm text-muted">
             Also supports HWB, LAB, LCH, OKLAB formats with alpha channels.
-            <NuxtLink to="/about" class="text-primary hover:underline">Learn more</NuxtLink>
+            <NuxtLink to="/about" class="text-primary hover:underline">
+              Learn more about ColorShift
+            </NuxtLink>
           </p>
         </template>
       </UCard>
@@ -209,7 +215,7 @@ const features = [
           size: 'lg'
         },
         {
-          label: 'Learn More',
+          label: 'About ColorShift',
           to: '/about',
           variant: 'outline',
           trailingIcon: 'i-lucide-arrow-right',
