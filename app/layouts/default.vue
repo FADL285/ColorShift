@@ -32,7 +32,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [
       </template>
     </UHeader>
 
-    <UMain>
+    <UMain as="main">
       <slot />
     </UMain>
 
