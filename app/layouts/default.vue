@@ -16,7 +16,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [
     <UHeader :title="appConfig.name">
       <template #title>
         <div class="flex items-center gap-2">
-          <img src="/logo.avif" alt="" class="h-6 w-auto" width="30" height="24" />
+          <img src="/logo.webp" alt="" class="h-6 w-auto" width="30" height="24" />
           <span class="font-bold">{{ appConfig.name }}</span>
         </div>
       </template>
