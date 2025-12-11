@@ -1,6 +1,16 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
+:root,
+:host,
+.light {
+  --ui-primary: var(--ui-color-primary-600);
+}
+
+.dark {
+  --ui-primary: var(--ui-color-primary-400);
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
