@@ -155,3 +155,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 Made with ❤️ using [Nuxt](https://nuxt.com) and [culori](https://culorijs.org)
+
+## Batch conversion boundaries
+
+Batch conversion parses CSS and brace-based SCSS declarations, including nested rules and SCSS variable values. Selectors, comments, strings, URLs, and interpolated values are preserved. Indented `.sass` is not supported; export it as `.scss` or CSS first. Invalid stylesheets show an error instead of producing a partially converted file.

@@ -1,4 +1,6 @@
 import { parse } from 'culori'
+import { parse as parseStylesheet } from 'postcss-scss'
+import valueParser from 'postcss-value-parser'
 import type { ColorFormat } from './useColorFormats'
 import type { ConversionOptions } from './useColorConverter'
 import { COMBINED_COLOR_REGEX } from '~/utils/colorPatterns'
@@ -40,22 +42,33 @@ export function useFileProcessor() {
 
   function detectColors(content: string): ColorMatch[] {
     const matches: ColorMatch[] = []
-    let match
-
-    // Reset regex
-    COMBINED_COLOR_REGEX.lastIndex = 0
-
-    while ((match = COMBINED_COLOR_REGEX.exec(content)) !== null) {
-      const { line, column } = getLineAndColumn(content, match.index)
-      matches.push({
-        original: match[0],
-        converted: '',
-        index: match.index,
-        length: match[0].length,
-        line,
-        column
+    // Parse declarations, never selectors, comments, strings or URL contents.
+    // SCSS interpolation is deliberately left untouched instead of guessing its value.
+    const stylesheet = parseStylesheet(content)
+    stylesheet.walkDecls((declaration) => {
+      const value = declaration.raws.value?.raw ?? declaration.value
+      if (value.includes('#{')) return
+      const start = declaration.source?.start?.offset
+      if (start === undefined) return
+      const valueStart = start + declaration.prop.length + declaration.raws.between!.length
+      valueParser(value).walk((node) => {
+        if (node.type !== 'word' && node.type !== 'function') return false
+        if (node.type === 'function' && /^(url|var|env)$/i.test(node.value)) return false
+        const candidate = value.slice(node.sourceIndex, node.sourceEndIndex)
+        COMBINED_COLOR_REGEX.lastIndex = 0
+        const match = COMBINED_COLOR_REGEX.exec(candidate)
+        if (match?.[0] !== candidate) return
+        const index = valueStart + node.sourceIndex
+        matches.push({
+          original: candidate,
+          converted: '',
+          index,
+          length: candidate.length,
+          ...getLineAndColumn(content, index)
+        })
+        return false
       })
-    }
+    })
 
     return matches
   }

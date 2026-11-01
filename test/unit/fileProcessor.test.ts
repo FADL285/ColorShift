@@ -117,6 +117,42 @@ describe('useFileProcessor', () => {
       expect(matches).toHaveLength(3)
     })
 
+    it('only detects declaration colors and preserves syntax contexts', () => {
+      const content = `/* #fff */
+#fff:hover {
+  content: "#fff";
+  background-image: url("icons.svg#fff");
+  color: #fff;
+  background: linear-gradient(#000, #fff);
+}`
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(3)
+      expect(result.converted).toContain('/* #fff */')
+      expect(result.converted).toContain('#fff:hover')
+      expect(result.converted).toContain('content: "#fff"')
+      expect(result.converted).toContain('url("icons.svg#fff")')
+    })
+
+    it('supports nested SCSS declarations without modifying interpolation', () => {
+      const content = '$brand: #fff; .card { &:hover { color: #000; } content: "#{#fff}"; }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(2)
+      expect(result.converted).toContain('content: "#{#fff}"')
+      expect(result.converted).toContain('&:hover')
+    })
+
+    it('preserves comments inside declaration values and accurate source locations', () => {
+      const content = '.a { color: /* #000 */ #fff; }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(1)
+      expect(result.converted).toContain('/* #000 */')
+      expect(result.changes[0].index).toBe(content.indexOf('#fff'))
+    })
+
+    it('rejects malformed stylesheets instead of returning destructive partial edits', () => {
+      expect(() => processFile('.a { color: #fff;', { targetFormat: 'rgb' })).toThrow()
+    })
+
     it('should return empty array for content without colors', () => {
       const content = '.button { font-size: 16px; }'
       const matches = detectColors(content)

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
+import { parse } from 'culori'
 import { useColorConverter } from '../../app/composables/useColorConverter'
 
 // Mock the useColorFormats composable
@@ -132,6 +133,13 @@ describe('useColorConverter', () => {
       const result = convertColor('rgba(255, 87, 51, 0.5)', 'hex')
       expect(result.isValid).toBe(true)
       expect(result.value).toBe('#ff573380')
+    })
+
+    it.each(['rgb', 'hsl'] as const)('serializes transparent %s as a valid CSS color', (format) => {
+      const result = convertColor('rgba(255, 87, 51, 0.5)', format)
+      expect(result.isValid).toBe(true)
+      expect(parse(result.value)?.alpha).toBeCloseTo(0.5)
+      expect(result.value).not.toContain(',')
     })
 
     it('should return invalid result for invalid input', () => {
