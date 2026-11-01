@@ -1,13 +1,13 @@
 # ColorShift
 
-A free, privacy-focused color conversion tool for designers and developers. Convert colors between CSS formats instantly and batch-process entire CSS/SASS/PostCSS files—all client-side.
+A free, privacy-focused color conversion tool for designers and developers. Convert colors between CSS formats instantly and batch-process entire CSS/SCSS/PostCSS files—all client-side.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
 
 - **Instant Conversion** — Convert colors in real-time as you type with live preview
-- **Batch Processing** — Upload CSS/SASS files and convert all colors at once
+- **Batch Processing** — Upload CSS/SCSS files and convert all colors at once
 - **100% Client-Side** — All processing happens in your browser. No data sent to servers
 - **All CSS Formats** — Supports HEX, RGB, HSL, HWB, LAB, LCH, OKLAB, OKLCH
 
@@ -158,4 +158,4 @@ Made with ❤️ using [Nuxt](https://nuxt.com) and [culori](https://culorijs.or
 
 ## Batch conversion boundaries
 
-Batch conversion parses CSS and brace-based SCSS declarations, including nested rules and SCSS variable values. Selectors, comments, strings, URLs, and interpolated values are preserved. Indented `.sass` is not supported; export it as `.scss` or CSS first. Invalid stylesheets show an error instead of producing a partially converted file.
+Batch conversion parses CSS and brace-based SCSS declarations, including nested rules and SCSS variable values. Selectors, comments, strings, URLs, and interpolation spans are preserved. Indented `.sass` is not supported; export it as `.scss` or CSS first. Literal colors alongside interpolation and inside var()/env() fallbacks are converted. Invalid stylesheets show an error instead of producing a partially converted file. Parsing and conversion run in a cancellable Web Worker, and stale results are discarded when files or settings change.

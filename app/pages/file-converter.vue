@@ -8,7 +8,7 @@ useSeoMeta({
   description:
     'Batch convert all colors in CSS, SCSS, and PostCSS files. Transform HEX to OKLCH, RGB to HSL, and more. 100% client-side processing, your files stay private.',
   keywords:
-    'batch color converter, css color converter, sass color converter, postcss color converter, bulk color conversion, hex to oklch converter, css file converter, convert css colors, batch hex to rgb, css color migration',
+    'batch color converter, css color converter, scss color converter, postcss color converter, bulk color conversion, hex to oklch converter, css file converter, convert css colors, batch hex to rgb, css color migration',
   ogTitle: 'ColorShift File Converter - Batch CSS Color Conversion',
   ogDescription:
     'Upload CSS files and convert all colors at once. Perfect for migrating to modern OKLCH format. 100% private, client-side processing.'
@@ -24,8 +24,6 @@ useSchemaOrg([
   })
 ])
 
-const { processFile } = useFileProcessor()
-
 // State
 const file = ref<File | null>(null)
 const fileContent = ref('')
@@ -40,10 +38,15 @@ const alphaFormat = ref<'decimal' | 'percentage' | 'preserve'>('decimal')
 const processingResult = ref<ProcessingResult | null>(null)
 const isProcessing = ref(false)
 const toast = useToast()
+let worker: Worker | null = null
+onBeforeUnmount(() => worker?.terminate())
 const previewTab = ref('side-by-side')
 
 // Handle file content loaded
 function onContentLoaded(content: string, name: string) {
+  worker?.terminate()
+  worker = null
+  isProcessing.value = false
   fileContent.value = content
   filename.value = name
   processingResult.value = null
@@ -58,24 +61,45 @@ function processContent() {
   if (!fileContent.value) return
 
   isProcessing.value = true
+  processingResult.value = null
 
-  // Use requestAnimationFrame to keep UI responsive
-  requestAnimationFrame(() => {
-    try {
-      processingResult.value = processFile(fileContent.value, {
-        targetFormat: targetFormat.value,
-        precision: precision.value,
-        alphaFormat: alphaFormat.value
-      })
-    } catch {
-      processingResult.value = null
-      toast.add({
-        title: 'Unable to process stylesheet',
-        description: 'Use valid CSS or brace-based SCSS. Indented Sass is not supported.',
-        color: 'error'
-      })
-    } finally {
-      isProcessing.value = false
+  worker?.terminate()
+  let currentWorker: Worker
+  try {
+    currentWorker = new Worker(new URL('../workers/fileProcessor.worker.ts', import.meta.url), {
+      type: 'module'
+    })
+  } catch {
+    isProcessing.value = false
+    toast.add({
+      title: 'Unable to process stylesheet',
+      description: 'This browser could not start file processing.',
+      color: 'error'
+    })
+    return
+  }
+  worker = currentWorker
+  const finish = (result: ProcessingResult | null, error?: string) => {
+    if (worker !== currentWorker) return
+    processingResult.value = result
+    isProcessing.value = false
+    currentWorker.terminate()
+    worker = null
+    if (error)
+      toast.add({ title: 'Unable to process stylesheet', description: error, color: 'error' })
+  }
+  currentWorker.onmessage = ({
+    data
+  }: MessageEvent<{ result?: ProcessingResult; error?: string }>) => {
+    finish(data.result ?? null, data.error)
+  }
+  currentWorker.onerror = () => finish(null, 'Could not process this stylesheet. Please try again.')
+  currentWorker.postMessage({
+    content: fileContent.value,
+    options: {
+      targetFormat: targetFormat.value,
+      precision: precision.value,
+      alphaFormat: alphaFormat.value
     }
   })
 }

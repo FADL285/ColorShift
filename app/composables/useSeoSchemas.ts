@@ -14,7 +14,7 @@ export function useSeoSchemas() {
     name: appConfig.name,
     url: appConfig.url,
     description:
-      'Free online color converter tool. Convert colors between HEX, RGB, HSL, OKLCH, LAB, LCH, OKLAB, and HWB formats. Batch process CSS/SASS files. 100% client-side, privacy-focused.',
+      'Free online color converter tool. Convert colors between HEX, RGB, HSL, OKLCH, LAB, LCH, OKLAB, and HWB formats. Batch process CSS/SCSS files. 100% client-side, privacy-focused.',
     applicationCategory: 'UtilitiesApplication',
     applicationSubCategory: 'DeveloperApplication',
     operatingSystem: 'All',
@@ -42,7 +42,7 @@ export function useSeoSchemas() {
       'HWB color format support',
       'Alpha channel transparency support',
       'Batch CSS file color conversion',
-      'SASS file color conversion',
+      'SCSS file color conversion',
       'PostCSS file color conversion',
       'Real-time color preview',
       'Copy to clipboard functionality',
@@ -81,7 +81,7 @@ export function useSeoSchemas() {
     {
       question: 'Can I convert entire CSS files?',
       answer:
-        'Yes, ColorShift offers batch file conversion. Upload your CSS, SASS, or PostCSS files and convert all color values to your preferred format at once.'
+        'Yes, ColorShift offers batch file conversion. Upload your CSS, SCSS, or PostCSS files and convert all color values to your preferred format at once.'
     },
     {
       question: 'What is OKLCH and why should I use it?',

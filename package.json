@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "version": "0.0.1",
-  "description": "A client-side web application for designers and developers to convert colors between different CSS color formats and batch-process CSS/SASS/PostCSS files.",
+  "description": "A client-side web application for designers and developers to convert colors between different CSS color formats and batch-process CSS/SCSS/PostCSS files.",
   "author": "Mohamed Fadl",
   "license": "MIT",
   "repository": {

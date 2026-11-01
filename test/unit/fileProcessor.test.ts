@@ -127,6 +127,10 @@ describe('useFileProcessor', () => {
 }`
       const result = processFile(content, { targetFormat: 'oklch' })
       expect(result.stats.converted).toBe(3)
+      expect(result.converted).toContain('color: oklch(0.68 0.17 40)')
+      expect(result.converted).toContain(
+        'linear-gradient(oklch(0.68 0.17 40), oklch(0.68 0.17 40))'
+      )
       expect(result.converted).toContain('/* #fff */')
       expect(result.converted).toContain('#fff:hover')
       expect(result.converted).toContain('content: "#fff"')
@@ -138,7 +142,28 @@ describe('useFileProcessor', () => {
       const result = processFile(content, { targetFormat: 'oklch' })
       expect(result.stats.converted).toBe(2)
       expect(result.converted).toContain('content: "#{#fff}"')
+      expect(result.converted).toContain('$brand: oklch(0.68 0.17 40)')
+      expect(result.converted).toContain('color: oklch(0.68 0.17 40)')
       expect(result.converted).toContain('&:hover')
+    })
+
+    it('converts literal neighbors of interpolation and var/env fallbacks only', () => {
+      const content =
+        '.x { --name: 1; box-shadow: 0 0 #fff #{ mix(#000, #fff) }; color: var(--brand, #fff); background: env(custom-color, #000); }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(3)
+      expect(result.converted).toContain('0 0 oklch(0.68 0.17 40) #{ mix(#000, #fff) }')
+      expect(result.converted).toContain('var(--brand, oklch(0.68 0.17 40))')
+      expect(result.converted).toContain('env(custom-color, oklch(0.68 0.17 40))')
+      expect(result.converted).toContain('--name: 1')
+    })
+
+    it('preserves UTF-16 offsets when interpolation follows emoji', () => {
+      const content = '.x { content: "😀"; box-shadow: #fff #{ $extra }; }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.converted).toContain(
+        'content: "😀"; box-shadow: oklch(0.68 0.17 40) #{ $extra }'
+      )
     })
 
     it('preserves comments inside declaration values and accurate source locations', () => {

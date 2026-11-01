@@ -226,7 +226,7 @@ const features = [
     <!-- CTA Section -->
     <UPageCTA
       title="Need to Convert Entire Files?"
-      description="Upload your CSS, SASS, or PostCSS files and convert all color values at once. Perfect for migrating to modern color formats like OKLCH."
+      description="Upload your CSS, SCSS, or PostCSS files and convert all color values at once. Perfect for migrating to modern color formats like OKLCH."
       :links="[
         {
           label: 'Try File Converter',

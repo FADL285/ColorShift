@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ColorShift is a client-side color conversion web app for designers and developers. It converts colors between CSS formats (HEX, RGB, HSL, OKLCH, LAB, LCH, HWB, named colors) and batch-processes CSS/SASS/PostCSS files. All processing happens in the browser—no backend.
+ColorShift is a client-side color conversion web app for designers and developers. It converts colors between CSS formats (HEX, RGB, HSL, OKLCH, LAB, LCH, HWB, named colors) and batch-processes CSS/SCSS/PostCSS files. All processing happens in the browser—no backend.
 
 ## Commands
 
