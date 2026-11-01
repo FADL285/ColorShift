@@ -39,7 +39,10 @@ const processingResult = ref<ProcessingResult | null>(null)
 const isProcessing = ref(false)
 const toast = useToast()
 let worker: Worker | null = null
-onBeforeUnmount(() => worker?.terminate())
+onBeforeUnmount(() => {
+  worker?.terminate()
+  worker = null
+})
 const previewTab = ref('side-by-side')
 
 // Handle file content loaded
@@ -64,6 +67,7 @@ function processContent() {
   processingResult.value = null
 
   worker?.terminate()
+  worker = null
   let currentWorker: Worker
   try {
     currentWorker = new Worker(new URL('../workers/fileProcessor.worker.ts', import.meta.url), {
