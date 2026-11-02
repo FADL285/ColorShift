@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { setup, $fetch, createPage } from '@nuxt/test-utils/e2e'
+import { setup, createPage } from '@nuxt/test-utils/e2e'
+
+async function renderedHtml(path: string) {
+  const page = await createPage(path)
+  try {
+    return await page.content()
+  } finally {
+    await page.close()
+  }
+}
 
 describe('File Converter Page', async () => {
   await setup({
@@ -9,19 +18,19 @@ describe('File Converter Page', async () => {
     }
   })
 
-  describe('Server Rendering', () => {
+  describe('Rendered page', () => {
     it('returns HTML with correct title', async () => {
-      const html = await $fetch('/file-converter')
+      const html = await renderedHtml('/file-converter')
       expect(html).toContain('Batch Convert CSS Files')
     })
 
     it('renders upload section', async () => {
-      const html = await $fetch('/file-converter')
+      const html = await renderedHtml('/file-converter')
       expect(html).toContain('Upload')
     })
 
     it('renders settings section', async () => {
-      const html = await $fetch('/file-converter')
+      const html = await renderedHtml('/file-converter')
       expect(html).toContain('Target Format')
     })
   })
