@@ -27,7 +27,7 @@ useHead(() => ({
 }))
 
 const ogTitle = `${appConfig.name} - Convert Colors Between CSS Formats`
-const ogDescription = `${appConfig.description}. Batch process CSS/SASS/PostCSS files client-side.`
+const ogDescription = `${appConfig.description}. Batch process CSS/SCSS/PostCSS files client-side.`
 
 useSeoMeta({
   titleTemplate: `%s - ${appConfig.name}`,

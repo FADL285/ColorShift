@@ -11,7 +11,7 @@ const emit = defineEmits<{
 const toast = useToast()
 const isDragging = ref(false)
 
-const acceptedTypes = ['.css', '.scss', '.sass', '.postcss']
+const acceptedTypes = ['.css', '.scss', '.postcss']
 const maxFileSize = 5 * 1024 * 1024 // 5MB
 
 async function handleFile(file: File) {

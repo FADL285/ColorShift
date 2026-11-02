@@ -6,9 +6,9 @@ import type { ProcessingResult } from '~/composables/useFileProcessor'
 useSeoMeta({
   title: 'Batch CSS Color Converter - Convert Entire Files to OKLCH',
   description:
-    'Batch convert all colors in CSS, SASS, and PostCSS files. Transform HEX to OKLCH, RGB to HSL, and more. 100% client-side processing, your files stay private.',
+    'Batch convert all colors in CSS, SCSS, and PostCSS files. Transform HEX to OKLCH, RGB to HSL, and more. 100% client-side processing, your files stay private.',
   keywords:
-    'batch color converter, css color converter, sass color converter, postcss color converter, bulk color conversion, hex to oklch converter, css file converter, convert css colors, batch hex to rgb, css color migration',
+    'batch color converter, css color converter, scss color converter, postcss color converter, bulk color conversion, hex to oklch converter, css file converter, convert css colors, batch hex to rgb, css color migration',
   ogTitle: 'ColorShift File Converter - Batch CSS Color Conversion',
   ogDescription:
     'Upload CSS files and convert all colors at once. Perfect for migrating to modern OKLCH format. 100% private, client-side processing.'
@@ -20,11 +20,9 @@ useSchemaOrg([
     '@type': 'WebPage',
     name: 'Batch CSS Color Converter - ColorShift',
     description:
-      'Batch convert all colors in CSS, SASS, and PostCSS files to your preferred format.'
+      'Batch convert all colors in CSS, SCSS, and PostCSS files to your preferred format.'
   })
 ])
-
-const { processFile } = useFileProcessor()
 
 // State
 const file = ref<File | null>(null)
@@ -39,10 +37,19 @@ const alphaFormat = ref<'decimal' | 'percentage' | 'preserve'>('decimal')
 // Result
 const processingResult = ref<ProcessingResult | null>(null)
 const isProcessing = ref(false)
+const toast = useToast()
+let worker: Worker | null = null
+onBeforeUnmount(() => {
+  worker?.terminate()
+  worker = null
+})
 const previewTab = ref('side-by-side')
 
 // Handle file content loaded
 function onContentLoaded(content: string, name: string) {
+  worker?.terminate()
+  worker = null
+  isProcessing.value = false
   fileContent.value = content
   filename.value = name
   processingResult.value = null
@@ -57,15 +64,47 @@ function processContent() {
   if (!fileContent.value) return
 
   isProcessing.value = true
+  processingResult.value = null
 
-  // Use requestAnimationFrame to keep UI responsive
-  requestAnimationFrame(() => {
-    processingResult.value = processFile(fileContent.value, {
+  worker?.terminate()
+  worker = null
+  let currentWorker: Worker
+  try {
+    currentWorker = new Worker(new URL('../workers/fileProcessor.worker.ts', import.meta.url), {
+      type: 'module'
+    })
+  } catch {
+    isProcessing.value = false
+    toast.add({
+      title: 'Unable to process stylesheet',
+      description: 'This browser could not start file processing.',
+      color: 'error'
+    })
+    return
+  }
+  worker = currentWorker
+  const finish = (result: ProcessingResult | null, error?: string) => {
+    if (worker !== currentWorker) return
+    processingResult.value = result
+    isProcessing.value = false
+    currentWorker.terminate()
+    worker = null
+    if (error)
+      toast.add({ title: 'Unable to process stylesheet', description: error, color: 'error' })
+  }
+  currentWorker.onmessage = ({
+    data
+  }: MessageEvent<{ result?: ProcessingResult; error?: string }>) => {
+    finish(data.result ?? null, data.error)
+  }
+  currentWorker.onerror = () => finish(null, 'Could not process this stylesheet. Please try again.')
+  currentWorker.postMessage({
+    content: fileContent.value,
+    options: {
       targetFormat: targetFormat.value,
       precision: precision.value,
       alphaFormat: alphaFormat.value
-    })
-    isProcessing.value = false
+    }
   })
 }
 
@@ -81,7 +120,7 @@ watch([targetFormat, precision, alphaFormat], () => {
   <div>
     <UPageSection
       title="Batch Convert CSS Files"
-      description="Upload your CSS, SASS, or PostCSS files and convert all color values to your preferred format. 100% client-side processing."
+      description="Upload your CSS, SCSS, or PostCSS files and convert all color values to your preferred format. 100% client-side processing."
     >
       <div class="grid gap-6 lg:grid-cols-3">
         <!-- Left Column: Upload & Settings -->

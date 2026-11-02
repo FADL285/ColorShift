@@ -44,7 +44,7 @@ const features = [
   {
     icon: 'i-lucide-file-code',
     title: 'Batch Processing',
-    description: 'Upload CSS/SASS files and convert all colors at once',
+    description: 'Upload CSS/SCSS files and convert all colors at once',
     highlight: true,
     highlightColor: 'info' as const
   },
@@ -68,7 +68,7 @@ const steps = [
   {
     icon: 'i-lucide-upload',
     title: '1. Enter or Upload',
-    description: 'Type a color value or upload your CSS/SASS file'
+    description: 'Type a color value or upload your CSS/SCSS file'
   },
   {
     icon: 'i-lucide-scan-search',

@@ -117,6 +117,67 @@ describe('useFileProcessor', () => {
       expect(matches).toHaveLength(3)
     })
 
+    it('only detects declaration colors and preserves syntax contexts', () => {
+      const content = `/* #fff */
+#fff:hover {
+  content: "#fff";
+  background-image: url("icons.svg#fff");
+  color: #fff;
+  background: linear-gradient(#000, #fff);
+}`
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(3)
+      expect(result.converted).toContain('color: oklch(0.68 0.17 40)')
+      expect(result.converted).toContain(
+        'linear-gradient(oklch(0.68 0.17 40), oklch(0.68 0.17 40))'
+      )
+      expect(result.converted).toContain('/* #fff */')
+      expect(result.converted).toContain('#fff:hover')
+      expect(result.converted).toContain('content: "#fff"')
+      expect(result.converted).toContain('url("icons.svg#fff")')
+    })
+
+    it('supports nested SCSS declarations without modifying interpolation', () => {
+      const content = '$brand: #fff; .card { &:hover { color: #000; } content: "#{#fff}"; }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(2)
+      expect(result.converted).toContain('content: "#{#fff}"')
+      expect(result.converted).toContain('$brand: oklch(0.68 0.17 40)')
+      expect(result.converted).toContain('color: oklch(0.68 0.17 40)')
+      expect(result.converted).toContain('&:hover')
+    })
+
+    it('converts literal neighbors of interpolation and var/env fallbacks only', () => {
+      const content =
+        '.x { --name: 1; box-shadow: 0 0 #fff #{ mix(#000, #fff) }; color: var(--brand, #fff); background: env(custom-color, #000); }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(3)
+      expect(result.converted).toContain('0 0 oklch(0.68 0.17 40) #{ mix(#000, #fff) }')
+      expect(result.converted).toContain('var(--brand, oklch(0.68 0.17 40))')
+      expect(result.converted).toContain('env(custom-color, oklch(0.68 0.17 40))')
+      expect(result.converted).toContain('--name: 1')
+    })
+
+    it('preserves UTF-16 offsets when interpolation follows emoji', () => {
+      const content = '.x { content: "😀"; box-shadow: #fff #{ $extra }; }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.converted).toContain(
+        'content: "😀"; box-shadow: oklch(0.68 0.17 40) #{ $extra }'
+      )
+    })
+
+    it('preserves comments inside declaration values and accurate source locations', () => {
+      const content = '.a { color: /* #000 */ #fff; }'
+      const result = processFile(content, { targetFormat: 'oklch' })
+      expect(result.stats.converted).toBe(1)
+      expect(result.converted).toContain('/* #000 */')
+      expect(result.changes[0].index).toBe(content.indexOf('#fff'))
+    })
+
+    it('rejects malformed stylesheets instead of returning destructive partial edits', () => {
+      expect(() => processFile('.a { color: #fff;', { targetFormat: 'rgb' })).toThrow()
+    })
+
     it('should return empty array for content without colors', () => {
       const content = '.button { font-size: 16px; }'
       const matches = detectColors(content)

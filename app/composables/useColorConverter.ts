@@ -1,5 +1,6 @@
 import { parse, converter, formatHex, formatCss } from 'culori'
 import type { Color } from 'culori'
+import { useColorFormats } from './useColorFormats'
 import type { ColorFormat } from './useColorFormats'
 
 export interface ConversionOptions {
@@ -92,7 +93,7 @@ export function useColorConverter() {
         const b = Math.round((rgb.b ?? 0) * 255)
         const alpha = formatAlpha(rgb.alpha, alphaFormat)
         if (alpha) {
-          return `rgba(${r}, ${g}, ${b}${alpha})`
+          return `rgb(${r} ${g} ${b}${alpha})`
         }
         return `rgb(${r}, ${g}, ${b})`
       }
@@ -105,7 +106,7 @@ export function useColorConverter() {
         const l = formatNumber((hsl.l ?? 0) * 100, 1)
         const alpha = formatAlpha(hsl.alpha, alphaFormat)
         if (alpha) {
-          return `hsla(${h}, ${s}%, ${l}%${alpha})`
+          return `hsl(${h} ${s}% ${l}%${alpha})`
         }
         return `hsl(${h}, ${s}%, ${l}%)`
       }
