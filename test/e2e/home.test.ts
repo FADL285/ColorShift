@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { setup, createPage } from '@nuxt/test-utils/e2e'
+import { setup, createPage, $fetch } from '@nuxt/test-utils/e2e'
 
 async function renderedHtml(path: string) {
   const page = await createPage(path)
@@ -16,6 +16,12 @@ describe('Home Page - Color Converter', async () => {
     browserOptions: {
       type: 'chromium'
     }
+  })
+
+  it('serves page text in the raw server HTML response', async () => {
+    const html = await $fetch('/')
+    expect(html).toContain('ColorShift')
+    expect(html).toContain('Free CSS Color Converter')
   })
 
   describe('Rendered page', () => {

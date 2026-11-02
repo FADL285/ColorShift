@@ -205,4 +205,74 @@ describe('Real browser conversion journeys', async () => {
       await page.close()
     }
   })
+  it('ignores an old completion while a replacement worker is pending', async () => {
+    const page = await createPage('/file-converter')
+    try {
+      await page.addInitScript(() => {
+        const workers: Array<{
+          onmessage: ((event: { data: unknown }) => void) | null
+          terminated: boolean
+        }> = []
+        class ControlledWorker {
+          onmessage: ((event: { data: unknown }) => void) | null = null
+          onerror = null
+          terminated = false
+          constructor() {
+            workers.push(this)
+          }
+          postMessage() {}
+          terminate() {
+            this.terminated = true
+          }
+        }
+        Object.assign(window, { Worker: ControlledWorker, __testWorkers: workers })
+      })
+      await page.reload()
+      for (const name of ['first.css', 'second.css']) {
+        await page.getByTestId('file-input').setInputFiles({
+          name,
+          mimeType: 'text/css',
+          buffer: Buffer.from('.a { color: #fff; }')
+        })
+        await expect
+          .poll(() => page.getByText('Processing file...', { exact: true }).isVisible())
+          .toBe(true)
+      }
+      const deliver = async (index: number, converted: string) =>
+        page.evaluate(
+          ({ index, converted }) => {
+            const workers = (
+              window as unknown as {
+                __testWorkers: Array<{
+                  terminated: boolean
+                  onmessage: (event: { data: unknown }) => void
+                }>
+              }
+            ).__testWorkers
+            workers[index]!.onmessage({
+              data: {
+                result: {
+                  original: 'original',
+                  converted,
+                  changes: [],
+                  stats: { total: 1, converted: 1, failed: 0 }
+                }
+              }
+            })
+            return { count: workers.length, oldTerminated: workers[0]!.terminated }
+          },
+          { index, converted }
+        )
+      expect(await deliver(0, 'stale')).toEqual({ count: 2, oldTerminated: true })
+      expect(await page.getByText('stale', { exact: true }).count()).toBe(0)
+      expect(await page.getByText('Processing file...', { exact: true }).isVisible()).toBe(true)
+      await deliver(1, 'fresh')
+      const button = page.getByRole('button', { name: 'Download Converted File' })
+      await expect.poll(() => button.isEnabled()).toBe(true)
+      const [download] = await Promise.all([page.waitForEvent('download'), button.click()])
+      expect(await readFile((await download.path())!, 'utf8')).toBe('fresh')
+    } finally {
+      await page.close()
+    }
+  })
 })
