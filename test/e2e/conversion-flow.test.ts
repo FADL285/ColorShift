@@ -228,7 +228,8 @@ describe('Real browser conversion journeys', async () => {
         Object.assign(window, { Worker: ControlledWorker, __testWorkers: workers })
       })
       await page.reload()
-      for (const name of ['first.css', 'second.css']) {
+      for (const [index, name] of ['first.css', 'second.css'].entries()) {
+        if (index > 0) await page.getByRole('button', { name: 'Remove file' }).click()
         await page.getByTestId('file-input').setInputFiles({
           name,
           mimeType: 'text/css',
@@ -238,6 +239,18 @@ describe('Real browser conversion journeys', async () => {
           .poll(() => page.getByText('Processing file...', { exact: true }).isVisible())
           .toBe(true)
       }
+      await expect
+        .poll(
+          () =>
+            page.evaluate(() => {
+              const workers = (
+                window as unknown as { __testWorkers: Array<{ terminated: boolean }> }
+              ).__testWorkers
+              return { count: workers.length, oldTerminated: workers[0]?.terminated }
+            }),
+          { timeout: 3000 }
+        )
+        .toEqual({ count: 2, oldTerminated: true })
       const deliver = async (index: number, converted: string) =>
         page.evaluate(
           ({ index, converted }) => {
