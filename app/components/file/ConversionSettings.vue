@@ -38,6 +38,7 @@ const alphaOptions = [
       <div class="space-y-2">
         <label class="block text-sm font-medium text-default">Target Format</label>
         <USelect
+          aria-label="Target format"
           :model-value="targetFormat"
           :items="formatOptions"
           value-key="value"

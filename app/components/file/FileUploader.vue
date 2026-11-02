@@ -95,6 +95,7 @@ function clearFile() {
       <input
         ref="fileInput"
         type="file"
+        data-testid="file-input"
         :accept="acceptedTypes.join(',')"
         class="hidden"
         @change="onFileSelect"

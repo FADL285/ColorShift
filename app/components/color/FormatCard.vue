@@ -40,6 +40,7 @@ async function copyToClipboard() {
 <template>
   <div
     class="group flex items-center justify-between p-3 rounded-lg border border-default bg-default hover:border-primary transition-colors"
+    :data-testid="`color-format-${format}`"
     :class="{ 'opacity-50': !isValid }"
   >
     <div class="flex-1 min-w-0">

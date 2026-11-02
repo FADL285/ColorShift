@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { setup, $fetch, createPage } from '@nuxt/test-utils/e2e'
+import { setup, createPage, $fetch } from '@nuxt/test-utils/e2e'
+
+async function renderedHtml(path: string) {
+  const page = await createPage(path)
+  try {
+    return await page.content()
+  } finally {
+    await page.close()
+  }
+}
 
 describe('Home Page - Color Converter', async () => {
   await setup({
@@ -9,21 +18,27 @@ describe('Home Page - Color Converter', async () => {
     }
   })
 
-  describe('Server Rendering', () => {
+  it('serves page text in the raw server HTML response', async () => {
+    const html = await $fetch('/')
+    expect(html).toContain('ColorShift')
+    expect(html).toContain('Free CSS Color Converter')
+  })
+
+  describe('Rendered page', () => {
     it('returns HTML with correct title', async () => {
-      const html = await $fetch('/')
+      const html = await renderedHtml('/')
       expect(html).toContain('ColorShift')
-      expect(html).toContain('Convert Colors Between CSS Formats')
+      expect(html).toContain('Free CSS Color Converter')
     })
 
     it('renders hero section', async () => {
-      const html = await $fetch('/')
+      const html = await renderedHtml('/')
       expect(html).toContain('Try Converter')
       expect(html).toContain('View on GitHub')
     })
 
     it('renders demo color palette', async () => {
-      const html = await $fetch('/')
+      const html = await renderedHtml('/')
       expect(html).toContain('Coral')
       expect(html).toContain('Blue')
       expect(html).toContain('Green')

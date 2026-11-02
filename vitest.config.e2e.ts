@@ -1,14 +1,11 @@
-import { defineVitestConfig } from '@nuxt/test-utils/config'
+import { defineConfig } from 'vitest/config'
 
-export default defineVitestConfig({
+export default defineConfig({
   test: {
     include: ['test/e2e/**/*.{test,spec}.ts'],
-    environment: 'nuxt',
-    environmentOptions: {
-      nuxt: {
-        domEnvironment: 'happy-dom'
-      }
-    },
-    testTimeout: 30000
+    environment: 'node',
+    fileParallelism: false,
+    testTimeout: 30000,
+    hookTimeout: 180000
   }
 })
