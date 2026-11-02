@@ -44,7 +44,7 @@ describe('Navigation & Layout', async () => {
       const page = await createPage('/')
 
       // Click on About link
-      await page.getByRole('link', { name: /About/i }).click()
+      await page.getByRole('link', { name: 'About', exact: true }).click()
       await page.waitForURL('**/about')
 
       // Verify we're on the about page
