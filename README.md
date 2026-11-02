@@ -162,6 +162,6 @@ Batch conversion parses CSS and brace-based SCSS declarations, including nested 
 
 ## Browser regression suite
 
-Install Chromium with `npx playwright-core install --with-deps chromium`, then run `npm run test:e2e`. Browser tests run in Vitest's Node environment against the built app, using real input/conversion/worker/upload/download flows. A controlled worker stub is used only to deterministically deliver a late stale result after reset; conversion/download assertions use the real worker. CI runs the browser suite for main-target and stacked fixes-target PRs.
+Install Chromium with `npx playwright-core install --with-deps chromium`, then run `npm run test:e2e`. Browser tests run in Vitest's Node environment against the built app, using real input/conversion/worker/upload/download flows. A controlled worker stub is used only to deterministically deliver stale results after reset or while a replacement conversion is pending; the normal conversion and download journeys use the real worker. CI runs the browser suite for main-target and stacked fixes-target PRs.
 
-This E2E branch is stacked on `fix/color-conversion-safety`; review and merge the functional fixes first. Local browser execution may require network access for the Playwright browser download.
+Local browser execution may require network access for the Playwright browser download.
