@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { setup, $fetch, createPage } from '@nuxt/test-utils/e2e'
+import { setup, createPage, $fetch } from '@nuxt/test-utils/e2e'
+
+async function renderedHtml(path: string) {
+  const page = await createPage(path)
+  try {
+    return await page.content()
+  } finally {
+    await page.close()
+  }
+}
 
 describe('Navigation & Layout', async () => {
   await setup({
@@ -9,9 +18,15 @@ describe('Navigation & Layout', async () => {
     }
   })
 
+  it('serves page text in the raw server HTML response', async () => {
+    const html = await $fetch('/about')
+    expect(html).toContain('ColorShift')
+    expect(html).toContain('About')
+  })
+
   describe('Header Navigation', () => {
     it('renders header with navigation links', async () => {
-      const html = await $fetch('/')
+      const html = await renderedHtml('/')
       expect(html).toContain('Convert')
       expect(html).toContain('File Converter')
       expect(html).toContain('About')
@@ -35,7 +50,7 @@ describe('Navigation & Layout', async () => {
       const page = await createPage('/')
 
       // Click on About link
-      await page.getByRole('link', { name: /About/i }).click()
+      await page.getByRole('link', { name: 'About', exact: true }).click()
       await page.waitForURL('**/about')
 
       // Verify we're on the about page
@@ -48,20 +63,20 @@ describe('Navigation & Layout', async () => {
 
   describe('Footer', () => {
     it('renders footer with GitHub link', async () => {
-      const html = await $fetch('/')
+      const html = await renderedHtml('/')
       expect(html).toContain('github.com/FADL285/ColorShift')
     })
   })
 
   describe('About Page', () => {
     it('renders about page content', async () => {
-      const html = await $fetch('/about')
+      const html = await renderedHtml('/about')
       expect(html).toContain('About')
       expect(html).toContain('ColorShift')
     })
 
     it('explains supported formats', async () => {
-      const html = await $fetch('/about')
+      const html = await renderedHtml('/about')
       expect(html).toContain('HEX')
       expect(html).toContain('RGB')
       expect(html).toContain('HSL')
