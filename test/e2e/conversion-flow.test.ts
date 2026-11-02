@@ -15,6 +15,7 @@ describe('Real browser conversion journeys', async () => {
         const output = page.getByTestId(`color-format-${format}`).locator('p[title]')
         await expect.poll(() => output.getAttribute('title')).toMatch(new RegExp(`^${format}\\(`))
         const value = (await output.getAttribute('title'))!
+        await expect.poll(() => output.textContent()).toBe(value)
         expect(await page.evaluate((color) => CSS.supports('color', color), value)).toBe(true)
         const actual = converter('rgb')(parse(value)!)!
         expect(actual.alpha).toBeCloseTo(0.5)
@@ -123,6 +124,9 @@ describe('Real browser conversion journeys', async () => {
       const button = page.getByRole('button', { name: 'Download Converted File' })
       await expect.poll(() => button.isEnabled()).toBe(true)
       await page.getByRole('radio', { name: 'Percentage (50%)', exact: true }).click()
+      await expect
+        .poll(async () => (await page.locator('pre').allTextContents()).map((text) => text.trim()))
+        .toContain('.a { color: rgb(255 87 51 / 50%); }')
       await expect.poll(() => button.isEnabled()).toBe(true)
       const [download] = await Promise.all([page.waitForEvent('download'), button.click()])
       expect(await readFile((await download.path())!, 'utf8')).toBe(
